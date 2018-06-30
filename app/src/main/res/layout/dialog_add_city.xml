@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="56dip"
+        app:cardElevation="4dp"
+        android:layout_margin="4dp">
+        <EditText
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp"
+            android:hint="@string/inter_city_text"
+            android:background="@android:color/transparent"
+            android:textSize="14sp"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:maxLength="56"
+            android:id="@+id/input_city"
+            android:textAllCaps="false"
+            android:inputType="textPersonName" />
+    </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/btn_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Найти и добавить"/>
+</LinearLayout>

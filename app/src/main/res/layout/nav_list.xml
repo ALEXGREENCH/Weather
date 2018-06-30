@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.navigation.NavigationView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/nav_history"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    android:fitsSystemWindows="true"
+    android:background="@drawable/bg_nav_bar">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:fontFamily="@font/abel"
+            android:gravity="center"
+            android:text="ПОГОДА В ГОРОДАХ"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button"
+            android:textSize="16sp"
+            android:textColor="@android:color/white" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list_cities"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+        <Button
+            android:id="@+id/btn_add_city"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_city"
+            android:background="@drawable/bg_button_add_city"
+            android:layout_margin="8dp"
+            android:textColor="@android:color/white"/>
+    </LinearLayout>
+
+</com.google.android.material.navigation.NavigationView>
