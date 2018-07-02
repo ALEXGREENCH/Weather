@@ -11,7 +11,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {Weather.class, WeatherDay.class}, version = 1, exportSchema = false)
+@Database(entities = {Weather.class}, version = 1, exportSchema = false)
 public abstract class WeatherRoomDatabase extends RoomDatabase {
 
     public abstract WeatherDao wordDao();
