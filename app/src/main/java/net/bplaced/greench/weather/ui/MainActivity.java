@@ -17,6 +17,7 @@ import net.bplaced.greench.weather.net.ApiClient;
 import net.bplaced.greench.weather.pojo.forecast.ForecastDaily;
 import net.bplaced.greench.weather.pojo.forecast.WeatherList;
 import net.bplaced.greench.weather.ui.adapter.CitiesListAdapter;
+import net.bplaced.greench.weather.ui.adapter.ForecastAdapter;
 import net.bplaced.greench.weather.ui.view.CenteredToolbar;
 
 import java.util.Calendar;
@@ -47,8 +48,9 @@ public class MainActivity extends AppCompatActivity implements IMainView {
     private ActionBarDrawerToggle drawerToggle;
 
 
-    RecyclerView list_cities;
-    CitiesListAdapter _adapter;
+    RecyclerView list_cities, list_forcast;
+    CitiesListAdapter citiesListAdapter;
+    ForecastAdapter forecastAdapter;
     WeatherViewModel _weatherViewModel;
 
     @Override
@@ -64,9 +66,11 @@ public class MainActivity extends AppCompatActivity implements IMainView {
         mDrawer.addDrawerListener(drawerToggle);
 
         list_cities = findViewById(R.id.list_cities);
+        list_forcast = findViewById(R.id.list_forcast);
         list_cities.setLayoutManager(new LinearLayoutManager(this));
+        list_forcast.setLayoutManager(new LinearLayoutManager(this));
 
-        _adapter = new CitiesListAdapter(this);
+        citiesListAdapter = new CitiesListAdapter(this);
 
         Button btn_add_city = findViewById(R.id.btn_add_city);
         btn_add_city.setOnClickListener(new View.OnClickListener() {
@@ -82,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements IMainView {
         super.onPostCreate(savedInstanceState);
         drawerToggle.syncState();
 
-        list_cities.setAdapter(_adapter);
+        list_cities.setAdapter(citiesListAdapter);
         listener_db();
     }
 
@@ -103,16 +107,7 @@ public class MainActivity extends AppCompatActivity implements IMainView {
     }
 
 
-    private String getDate(long timeStamp){
-        try{
-            Calendar cal = Calendar.getInstance();
-            cal.setTimeInMillis(timeStamp * 1000L);
-            return  DateFormat.format("dd-MM-yyyy hh:mm:ss", cal).toString();
-        }
-        catch(Exception ex){
-            return "xx";
-        }
-    }
+
 
 
     @Override
@@ -125,27 +120,29 @@ public class MainActivity extends AppCompatActivity implements IMainView {
 
     void listener_db(){
         _weatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
-        _weatherViewModel.getAllWords().observe(this, data -> _adapter.setCities(data));
+        _weatherViewModel.getAllWords().observe(this, data -> citiesListAdapter.setCities(data));
     }
 
     @Override
     public void setCity(String city) {
         toolbar.setTitle(city);
         mDrawer.closeDrawer(GravityCompat.START);
+
+        load_data_forecast(city);
     }
 
-    @Override
-    public void addCityToDB(String name_city) {
-        _weatherViewModel.insert(new Weather(AppUtils.getTimeMillis(), name_city, "", "", ""));
-        ApiClient.getRequestInterface().getForecastDaily(name_city, "json", "metric", "1", "ru", API_KEY)
+    private void load_data_forecast(String name_city) {
+        ApiClient.getRequestInterface().getForecastDaily(name_city, "json", "metric", "7", "ru", API_KEY)
                 .enqueue(new Callback<ForecastDaily>() {
-            @Override
-            public void onResponse(Call<ForecastDaily> call, Response<ForecastDaily> response) {
-                ForecastDaily forecastDaily = response.body();
-                int code = response.code();
-                if (code == 200) {
-                    List<WeatherList> weatherList = forecastDaily.getWeatherList();
-                    //tvCity.setText(forecastDaily.getCity().getName());
+                    @Override
+                    public void onResponse(Call<ForecastDaily> call, Response<ForecastDaily> response) {
+                        ForecastDaily forecastDaily = response.body();
+                        int code = response.code();
+                        if (code == 200) {
+                            forecastAdapter = new ForecastAdapter(forecastDaily, getApplicationContext());
+                            list_forcast.setAdapter(forecastAdapter);
+                            //List<WeatherList> weatherList = forecastDaily.getWeatherList();
+                            //tvCity.setText(forecastDaily.getCity().getName());
                     /*
                     for(WeatherList w : weatherList){
                         Log.i("TAG", "Дата: " + getDate(w.getDt()));
@@ -159,16 +156,21 @@ public class MainActivity extends AppCompatActivity implements IMainView {
                         Log.i("TAG", w.getWeather().get(0).getDescription());
                     }
                     */
-                }else {
-                    Toast.makeText(MainActivity.this, "Ошибка!", Toast.LENGTH_SHORT).show();
-                }
-            }
+                        }else {
+                            Toast.makeText(MainActivity.this, "Ошибка!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
-            @Override
-            public void onFailure(Call<ForecastDaily> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Ошибка!", Toast.LENGTH_SHORT).show();
-            }
-        });
+                    @Override
+                    public void onFailure(Call<ForecastDaily> call, Throwable t) {
+                        Toast.makeText(MainActivity.this, "Ошибка!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    @Override
+    public void addCityToDB(String name_city) {
+        _weatherViewModel.insert(new Weather(AppUtils.getTimeMillis(), name_city, "", "", ""));
     }
 
     private void showDialog() {

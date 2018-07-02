@@ -12,12 +12,10 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
+import net.bplaced.greench.weather.AppUtils;
 import net.bplaced.greench.weather.R;
 import net.bplaced.greench.weather.db.Weather;
 import net.bplaced.greench.weather.net.ApiClient;
-import net.bplaced.greench.weather.pojo.current_weather.CurrentWeather;
 import net.bplaced.greench.weather.ui.IMainView;
 import net.bplaced.greench.weather.ui.MainActivity;
 
@@ -38,7 +36,7 @@ import retrofit2.Response;
 
 import static net.bplaced.greench.weather.Constants.API_KEY;
 
-public class CitiesListAdapter extends RecyclerView.Adapter<CitiesListAdapter.HistoryViewHolder> {
+public class CitiesListAdapter extends RecyclerView.Adapter<CitiesListAdapter.WeatherViewHolder> {
 
     private List<Weather> weatherList;
     private Context c;
@@ -60,13 +58,13 @@ public class CitiesListAdapter extends RecyclerView.Adapter<CitiesListAdapter.Hi
 
     @NonNull
     @Override
-    public HistoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public WeatherViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_city, parent, false);
-        return new HistoryViewHolder(v);
+        return new WeatherViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull HistoryViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull WeatherViewHolder holder, int position) {
         setAnimation(holder.itemView, position);
 
         if (firstLinkDb) {
@@ -99,8 +97,8 @@ public class CitiesListAdapter extends RecyclerView.Adapter<CitiesListAdapter.Hi
         return weatherList.size();
     }
 
-    static class HistoryViewHolder extends RecyclerView.ViewHolder{
-        HistoryViewHolder(View itemView) {
+    static class WeatherViewHolder extends RecyclerView.ViewHolder{
+        WeatherViewHolder(View itemView) {
             super(itemView);
         }
     }
@@ -154,7 +152,7 @@ public class CitiesListAdapter extends RecyclerView.Adapter<CitiesListAdapter.Hi
                     //String url_icon = "http://openweathermap.org/img/w/" + icon + ".png";
                     //Picasso.get().load(url_icon).into(img);
 
-                    img.setImageResource(getNameResIcon(icon));
+                    img.setImageResource(AppUtils.getNameResIcon(icon, c));
 
                     String description = object_weather.getString("description");
                     String cap_description = description.substring(0, 1).toUpperCase() + description.substring(1);
@@ -183,70 +181,6 @@ public class CitiesListAdapter extends RecyclerView.Adapter<CitiesListAdapter.Hi
 
             }
         });
-    }
-
-
-    private Integer getNameResIcon(String s){
-        String res_name = "";
-        switch (s){
-            case "01d":
-                res_name = "clear_sky";
-                break;
-            case "01n":
-                res_name = "clear_sky_n";
-                break;
-            case "02d":
-                res_name = "few_clouds";
-                break;
-            case "02n":
-                res_name = "few_clouds_n";
-            break;
-            case "03d":
-                res_name = "scattered_clouds";
-            break;
-            case "03n":
-                res_name = "scattered clouds";
-            break;
-            case "04d":
-                res_name = "broken_clouds";
-            break;
-            case "04n":
-                res_name = "broken clouds";
-            break;
-            case "09d":
-                res_name = "shower_rain";
-            break;
-            case "09n":
-                res_name = "shower_rain";
-            break;
-            case "10d":
-                res_name = "rain";
-            break;
-            case "10n":
-                res_name = "rain_n";
-            break;
-            case "11d":
-                res_name = "thunderstorm";
-            break;
-            case "11n":
-                res_name = "thunderstorm";
-            break;
-            case "13d":
-                res_name = "snow";
-            break;
-            case "13n":
-                res_name = "snow";
-            break;
-            case "50d":
-                res_name = "mist";
-            break;
-            case "50n":
-                res_name = "mist";
-            break;
-        }
-        Log.i("TAG", "img = " + res_name);
-
-        return c.getResources().getIdentifier(res_name,"drawable", c.getPackageName());
     }
 
 

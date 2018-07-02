@@ -22,12 +22,10 @@
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:background="@color/colorPrimaryDark"/>
 
-        <FrameLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list_forcast"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#000">
-
-        </FrameLayout>
+            android:layout_height="match_parent"/>
 
     </LinearLayout>
 
