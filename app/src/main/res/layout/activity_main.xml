@@ -8,9 +8,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.MainActivity">
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
     <net.bplaced.greench.weather.ui.view.CenteredToolbar
         android:id="@+id/toolbar"
@@ -21,7 +22,14 @@
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:background="@color/colorPrimaryDark"/>
 
-    </FrameLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#000">
+
+        </FrameLayout>
+
+    </LinearLayout>
 
     <include layout="@layout/nav_list"/>
     <include layout="@layout/nav_settings"/>

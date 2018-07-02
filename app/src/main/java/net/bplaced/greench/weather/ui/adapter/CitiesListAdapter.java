@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -42,6 +44,7 @@ public class CitiesListAdapter extends RecyclerView.Adapter<CitiesListAdapter.Hi
     private Context c;
     private IMainView mainView;
     private boolean firstLinkDb = true;
+    private int lastPosition;
 
     public CitiesListAdapter(MainActivity activity){
         this.c = activity.getApplicationContext();
@@ -51,6 +54,7 @@ public class CitiesListAdapter extends RecyclerView.Adapter<CitiesListAdapter.Hi
 
     public void setCities(List<Weather> weathers) {
         weatherList = weathers;
+        lastPosition = (getItemCount() - 1);
         notifyDataSetChanged();
     }
 
@@ -63,6 +67,8 @@ public class CitiesListAdapter extends RecyclerView.Adapter<CitiesListAdapter.Hi
 
     @Override
     public void onBindViewHolder(@NonNull HistoryViewHolder holder, int position) {
+        setAnimation(holder.itemView, position);
+
         if (firstLinkDb) {
             String name = weatherList.get(0).getCity_name();
             mainView.setCity(name);
@@ -149,7 +155,6 @@ public class CitiesListAdapter extends RecyclerView.Adapter<CitiesListAdapter.Hi
                     //Picasso.get().load(url_icon).into(img);
 
                     img.setImageResource(getNameResIcon(icon));
-                    Log.i("TAG", "" + getNameResIcon(icon));
 
                     String description = object_weather.getString("description");
                     String cap_description = description.substring(0, 1).toUpperCase() + description.substring(1);
@@ -244,4 +249,14 @@ public class CitiesListAdapter extends RecyclerView.Adapter<CitiesListAdapter.Hi
         return c.getResources().getIdentifier(res_name,"drawable", c.getPackageName());
     }
 
+
+    private void setAnimation(View viewToAnimate, int position) {
+        Log.i("TAG", "position = " + position + ", lastPosition = " + lastPosition);
+
+        if (position >= lastPosition) {
+            Animation animation = AnimationUtils.loadAnimation(c, android.R.anim.slide_in_left);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
+        }
+    }
 }
