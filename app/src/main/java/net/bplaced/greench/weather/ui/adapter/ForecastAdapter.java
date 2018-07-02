@@ -31,6 +31,15 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Forcas
         this.c = c;
     }
 
+
+    public void clear() {
+        if (weatherList != null) {
+            final int size = weatherList.size();
+            weatherList.clear();
+            notifyItemRangeRemoved(0, size);
+        }
+    }
+
     @NonNull
     @Override
     public ForcastViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -45,7 +54,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Forcas
 
         Double min = weatherList.get(position).getTemp().getMin();
         Integer int_min = min.intValue();
-        Double max = weatherList.get(position).getTemp().getMin();
+        Double max = weatherList.get(position).getTemp().getMax();
         Integer int_max = max.intValue();
 
         Log.i("TAG", "dt = " + getDate(weatherList.get(position).getDt()));

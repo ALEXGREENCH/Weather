@@ -125,9 +125,11 @@ public class MainActivity extends AppCompatActivity implements IMainView {
 
     @Override
     public void setCity(String city) {
+        if (forecastAdapter != null)
+            forecastAdapter.clear();
+
         toolbar.setTitle(city);
         mDrawer.closeDrawer(GravityCompat.START);
-
         load_data_forecast(city);
     }
 
